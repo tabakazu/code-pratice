@@ -7,6 +7,21 @@ pub struct Item {
     pub name: String,
 }
 
+#[get("/items")]
+async fn get_item_list() -> Result<HttpResponse, Error> {
+    let items = [
+        Item {
+            id: 1,
+            name: "item".to_string(),
+        },
+        Item {
+            id: 2,
+            name: "item".to_string(),
+        },
+    ];
+    Ok(HttpResponse::Ok().json(items))
+}
+
 #[get("/items/{item_id}")]
 async fn get_item(
     item_id: web::Path<u32>,
@@ -26,6 +41,7 @@ async fn main() -> std::io::Result<()> {
 
     HttpServer::new(move || {
         App::new()
+            .service(get_item_list)
             .service(get_item)
     })
     .bind(&bind)?
