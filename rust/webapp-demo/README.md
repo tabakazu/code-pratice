@@ -5,6 +5,8 @@ $ cargo new webapp-demo
 $ cd webapp-demo/
 $ rustup install stable
 $ cargo run
+$ cargo install cargo-watch
+$ cargo watch -x run
 ```
 
 ```
