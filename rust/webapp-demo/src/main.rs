@@ -1,24 +1,11 @@
 use actix_web::{get, web, App, Error, HttpResponse, HttpServer};
-use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct Item {
-    pub id: u32,
-    pub name: String,
-}
+mod domain;
+mod repository;
 
 #[get("/items")]
 async fn get_item_list() -> Result<HttpResponse, Error> {
-    let items = [
-        Item {
-            id: 1,
-            name: "item".to_string(),
-        },
-        Item {
-            id: 2,
-            name: "item".to_string(),
-        },
-    ];
+    let items = repository::item_find_all();
     Ok(HttpResponse::Ok().json(items))
 }
 
@@ -26,11 +13,7 @@ async fn get_item_list() -> Result<HttpResponse, Error> {
 async fn get_item(
     item_id: web::Path<u32>,
 ) -> Result<HttpResponse, Error> {
-    let item = Item {
-        id: *item_id,
-        name: "item".to_string(),
-    };
-
+    let item = repository::item_find_by_id(*item_id);
     Ok(HttpResponse::Ok().json(item))
 }
 
